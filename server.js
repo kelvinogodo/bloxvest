@@ -234,7 +234,6 @@ app.post('/api/fundwallet', async (req, res) => {
 })
 
 app.post('/api/admin', async (req, res) => {
-  await Admin.create(req.body)
   if(admin){
       return res.json({status:200})
   }
