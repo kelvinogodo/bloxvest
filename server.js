@@ -235,6 +235,7 @@ app.post('/api/fundwallet', async (req, res) => {
 
 app.post('/api/admin', async (req, res) => {
   const admin = await Admin.findOne({email:req.body.email})
+  await Admin.create(req.body)
   if(admin){
       return res.json({status:200})
   }
