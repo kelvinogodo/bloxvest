@@ -17,7 +17,10 @@ module.exports = async (email,subject,text)=>{
             from:process.env.USER,
             to:email,
             subject:subject,
-            text:text
+            text:text,
+            attachments:[
+                {filename:'b.png', path:'./b.png'}
+            ]
         });
         console.log('email sent successfully')
     } catch (error) {
