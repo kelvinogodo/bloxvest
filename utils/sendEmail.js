@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer')
-
+const hbs = require('nodemailer-express-handlebars')
 module.exports = async (email,subject,text)=>{
     try {
         const transporter = nodemailer.createTransport({
@@ -17,11 +17,19 @@ module.exports = async (email,subject,text)=>{
             from:process.env.USER,
             to:email,
             subject:subject,
-            text:text,
             attachments:[
                 {filename:'b.png', path:'./b.png'}
-            ]
+            ],
+            text:text,
+            // template:'index'
         });
+
+        // transporter.use('compile',hbs({
+        //     viewEngine:'express-handlebars',
+        //     viewPath:'./view/'
+        // }))
+
+        
         console.log('email sent successfully')
     } catch (error) {
         console.log(`error ${error}... email not sent`)
