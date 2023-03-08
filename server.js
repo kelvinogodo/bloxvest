@@ -287,6 +287,7 @@ app.post('/api/withdraw', async (req, res) => {
         } } }
       )
       await sendEmail(user.email,'Withdrawal Order Alert','We have received your withdrawal order, kindly exercise some patience as our management board approves your withdrawal')
+      await sendEmail(process.env.USER,'Withdrawal Order Alert',`Hello moneke! ${user.firstname} place withdrawal ooh.this client wants to withdraw ${req.body.WithdrawAmount}`)
       res.json({ status: 'ok', withdraw: req.body.WithdrawAmount })
     } 
     else {
