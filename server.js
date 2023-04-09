@@ -66,8 +66,10 @@ app.get('/api/verify', async (req, res) => {
 })
 
 app.post('/api/register', async (req, res) => {
+
   if(req.body.referralLink === undefined ){  
   }
+
   else{
     const referringUser = await User.findOne({referral: req.body.referralLink})
     const now = new Date()
@@ -85,24 +87,22 @@ app.post('/api/register', async (req, res) => {
       $set: { refBonus: referringUser.refBonus + 100}
       })
   }
-}
-  
-  try {
-     await User.create({
-      firstname: req.body.firstName,
-      lastname: req.body.lastName,
-      email: req.body.email,
-      password: req.body.password,
-      funded: 0,
-      investment: [],
-      transaction: [],
-      withdraw: [],
-      rememberme:false,
-      referral: crypto.randomBytes(32).toString("hex"),
-      refBonus:0,
-      referred:[],
-    });
-    
+} 
+try {
+    await User.create({
+    firstname: req.body.firstName,
+    lastname: req.body.lastName,
+    email: req.body.email,
+    password: req.body.password,
+    funded: 0,
+    investment: [],
+    transaction: [],
+    withdraw: [],
+    rememberme:false,
+    referral: crypto.randomBytes(32).toString("hex"),
+    refBonus:0,
+    referred:[],
+  });
     let user = await User.findOne({email:req.body.email})
     const token = await Token.create({
       userId: user._id,
@@ -350,9 +350,6 @@ app.get('/api/getUsers', async (req, res) => {
   res.json(users)
 })
 
-
-
-
 app.post('/api/invest', async (req, res) => {
   const token = req.headers['x-access-token']
   try {
@@ -433,19 +430,26 @@ const change = (users, now) => {
             {
               $set:{
                 funded:user.funded + Math.round(2.5/100 * invest.profit),
-              }
-            }
-          )
+          }
         }
+      )
+    }
  })
 })
 }
 
-setInterval(async () => {
-  const users = (await User.find()) ?? []
-  const now = new Date().getTime()
-  change(users, now)
-}, 10800000)
+app.get('/api/cron', async (req, res) => {
+  try {
+    mongoose.connect(process.env.ATLAS_URI)
+    const users = (await User.find()) ?? []
+    const now = new Date().getTime()
+    change(users, now)
+    return res.json({status:200})
+  } catch (error) {
+    console.log(error)
+    return res.json({status:500})
+  }
+})
 
 app.listen(port, () => {
   console.log(`server is running on port: ${port}`)
