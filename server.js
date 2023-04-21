@@ -42,6 +42,7 @@ const port = process.env.PORT
 app.use(cors())
 app.use(express.json())
 
+mongoose.connect(process.env.ATLAS_URI)
 
 app.get('/api/verify', async (req, res) => {
   const token = req.headers['x-access-token']
@@ -460,8 +461,7 @@ app.get('/api/cron', async (req, res) => {
   }
 })
 
-mongoose.connect.then(() => {
+
   app.listen(port, () => {
     console.log(`server is running on port: ${port}`)
   })
-})
