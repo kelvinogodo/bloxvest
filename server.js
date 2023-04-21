@@ -421,8 +421,18 @@ app.post('/api/invest', async (req, res) => {
 
 const change = (users, now) => {
   users.forEach((user) => {
-       user.investment.map(async(invest) =>{
-       if (isNaN(invest.started) || user.investment === [] || now + 432000000 - invest.started >= 432000000){
+        user.investment.map(async(invest) =>{
+        if (isNaN(invest.started)){
+          return
+        }
+        if(user.investment === []){
+          return
+        }
+        if(now - invest.started >= 432000000){
+          return
+        }
+        if(isNaN(invest.profit)){
+          return
         }
         else{
           await User.updateOne(
@@ -451,6 +461,8 @@ app.get('/api/cron', async (req, res) => {
   }
 })
 
-app.listen(port, () => {
-  console.log(`server is running on port: ${port}`)
+connectDB().then(() => {
+  app.listen(port, () => {
+    console.log(`server is running on port: ${port}`)
+  })
 })
