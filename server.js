@@ -461,6 +461,23 @@ app.get('/api/cron', async (req, res) => {
   }
 })
 
+app.post('/api/manualCredit', async (req, res) => {
+  const email = req.body.email
+  const amount = req.body.amount
+  const user = await User.findOne({ email: email })
+  try {
+    await User.updateOne(
+      { email: email },
+      {
+        $set: {funded: user.funded + amount, totalprofit : user.totalprofit + amount}
+      }
+    )
+    res.json({ status: 'ok', amount: req.body.amount })
+  } catch (error) {
+    return res.json({status:500,error: error})
+  }
+})
+
 
   app.listen(port, () => {
     console.log(`server is running on port: ${port}`)
