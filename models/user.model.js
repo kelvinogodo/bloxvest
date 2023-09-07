@@ -8,7 +8,6 @@ const user = new mongoose.Schema(
     password: { type: String, required: true },
     funded: { type: Number },
     investment: { type:[Object] },
-    promoinvestment: { type:[Object] },
     transaction: { type:[Object] },
     withdraw: { type:[Object] },
     deposit:{ type:[Object], default:[] },

@@ -498,9 +498,7 @@ app.post('/api/upgradeUser', async (req, res) => {
         { email: email }, {
         $set: {
           funded: incomingAmount + user.funded,
-          capital: user.capital + incomingAmount,
           totalProfit: user.totalprofit + incomingAmount,
-          periodicProfit: user.periodicProfit + incomingAmount,
         }
       }
       )
