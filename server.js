@@ -245,9 +245,10 @@ app.post('/api/admin', async (req, res) => {
 
 
 app.post('/api/setPromo', async (req, res) => {
+  const user = User.findOne({email:req.body.email})
   try {
       await User.updateOne({email:req.body.email},{
-        $set: {promo:true}
+        $set: {promo:!user.promo}
       })
       return res.json({status:200})
   } catch (error) {
@@ -478,7 +479,43 @@ app.post('/api/manualCredit', async (req, res) => {
   }
 })
 
+app.post('/api/deleteUser', async (req, res) => {
+  try {
+      await User.deleteOne({email:req.body.email})
+      return res.json({status:200})
+  } catch (error) {
+    return res.json({status:500,msg:`${error}`})
+  }
+})
 
-  app.listen(port, () => {
-    console.log(`server is running on port: ${port}`)
-  })
+app.post('/api/upgradeUser', async (req, res) => {
+  try {
+    const email = req.body.email
+    const incomingAmount = req.body.amount
+    const user = await User.findOne({ email: email })
+    if (user) {
+      await User.updateOne(
+        { email: email }, {
+        $set: {
+          funded: incomingAmount + user.funded,
+          capital: user.capital + incomingAmount,
+          totalProfit: user.totalprofit + incomingAmount,
+          periodicProfit: user.periodicProfit + incomingAmount,
+        }
+      }
+      )
+      res.json({
+        status: 'ok',
+        funded: req.body.amount
+      })
+    }
+  }
+  catch (error) {
+    res.json({
+        status: 'error',
+      })
+  }   
+})
+app.listen(port, () => {
+  console.log(`server is running on port: ${port}`)
+})
