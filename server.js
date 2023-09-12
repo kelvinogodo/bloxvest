@@ -245,12 +245,16 @@ app.post('/api/admin', async (req, res) => {
 
 
 app.post('/api/setPromo', async (req, res) => {
-  const user = User.findOne({email:req.body.email})
+  const user = await User.findOne({email:req.body.email})
   try {
       await User.updateOne({email:req.body.email},{
         $set: {promo:!user.promo}
       })
-      return res.json({status:200})
+    if(user.promo){
+      return res.json({ status: false })
+    } else {
+      return res.json({status:true})
+    }  
   } catch (error) {
     return res.json({status:500,msg:`${error}`})
   }
