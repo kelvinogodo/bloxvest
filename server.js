@@ -247,9 +247,11 @@ app.post('/api/admin', async (req, res) => {
 app.post('/api/setPromo', async (req, res) => {
   const user = await User.findOne({email:req.body.email})
   try {
+    if (user) {
       await User.updateOne({email:req.body.email},{
         $set: {promo:!user.promo}
       })
+    } 
     if(user.promo){
       return res.json({ status: false })
     } else {
@@ -376,6 +378,8 @@ app.post('/api/invest', async (req, res) => {
           return (req.body.amount * 30) / 100
         case '50%':
           return (req.body.amount * 50) / 100
+        case '500%':
+          return (req.body.amount * 500) / 100
       }
     })()
     if (user.funded >= req.body.amount) {
@@ -430,7 +434,7 @@ const change = (users, now) => {
         if (isNaN(invest.started)){
           return
         }
-        if(user.investment === []){
+        if(user.investment == []){
           return
         }
         if(invest.ended - invest.started <= 0){
