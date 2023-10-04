@@ -31,6 +31,7 @@ app.get(
     '/deposit',
     '/checkout',
     '/withdrawlogs',
+    '/promoplan',
     '/users/:id/verify/:token',
   ],
   (req, res) => res.sendFile(path.join(process.cwd(), '/dist/index.html'))
