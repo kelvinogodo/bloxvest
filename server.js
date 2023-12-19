@@ -13,30 +13,6 @@ const sendEmail = require('./utils/sendEmail')
 dotenv.config()
 
 const app = express()
-app.use(serveStatic(path.join(process.cwd(), '/dist')))
-app.get(
-  [
-    '/',
-    '/dashboard',
-    '/myprofile',
-    '/login',
-    '/signup',
-    '/withdraw',
-    '/plans',
-    '/referrals',
-    '/admin',
-    '/fundwallet',
-    '/transactions',
-    '/investments',
-    '/deposit',
-    '/checkout',
-    '/withdrawlogs',
-    '/promoplan',
-    '/users/:id/verify/:token',
-  ],
-  (req, res) => res.sendFile(path.join(process.cwd(), '/dist/index.html'))
-)
-app.use('/static', express.static('dist/static'))
 
 const port = process.env.PORT
 

@@ -17,20 +17,8 @@ module.exports = async (email,subject,text)=>{
             from:process.env.USER,
             to:email,
             subject:subject,
-            attachments:[
-                {filename:'b.png', path:'./b.png'}
-            ],
             text:text,
-            // template:'index'
         });
-
-        // transporter.use('compile',hbs({
-        //     viewEngine:'express-handlebars',
-        //     viewPath:'./view/'
-        // }))
-
-        
-        console.log('email sent successfully')
     } catch (error) {
         console.log(`error ${error}... email not sent`)
     }
