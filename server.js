@@ -83,8 +83,7 @@ try {
       userId: user._id,
       token: crypto.randomBytes(32).toString("hex")
     })
-    const url= `${process.env.BASE_URL}users/${user._id}/verify/${token.token}`
-    return res.json({ status: 'ok', url:url,email:user.email, name:user.firstname })
+    return res.json({ status: 'ok',email:user.email, name:user.firstname })
   } catch (error) {
     console.log(error)
     return res.json({ status: 'error', error: 'duplicate email' })
