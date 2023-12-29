@@ -268,14 +268,26 @@ app.post('/api/withdraw', async (req, res) => {
           id:crypto.randomBytes(32).toString("hex"),
         } } }
       )
-      await sendEmail(user.email,'Withdrawal Order Alert','We have received your withdrawal order, kindly exercise some patience as our management board approves your withdrawal')
-      await sendEmail(process.env.USER,'Withdrawal Order Alert',`Hello moneke! ${user.firstname} place withdrawal ooh.this client wants to withdraw ${req.body.WithdrawAmount}, to be withdrawn into ${req.body.wallet}`)
-      res.json({ status: 'ok', withdraw: req.body.WithdrawAmount })
-    } 
-    else {
-      await sendEmail(user.email,'Withdrawal Order Alert',`Sorry! ${user.firstname} You dont insufficient funds to complete this process. fund your account and try again.`)
-      res.json({ status:400 ,message: 'You do not have sufficient amount in your account' })
+      return res.json({
+            status: 'ok',
+            withdraw: req.body.WithdrawAmount,
+            email: user.email,
+            name: user.firstname,
+            message: `We have received your withdrawal order, kindly exercise some patience as our management board approves your withdrawal`,
+            subject: 'Withdrawal Order Alert',
+            adminMessage: `Hello Moneke! a user with the name ${user.firstname} placed withdrawal of $${req.body.WithdrawAmount} USD, to be withdrawn into ${req.body.wallet} ${req.body.method} wallet`,
+      })
     }
+   
+  else{
+      res.json({
+      status: 400,
+      subject:'Failed Withdrawal Alert',
+      email: user.email,
+      name: user.firstname,
+      withdrawMessage:`We have received your withdrawal order, but you can only withdraw your profits. Kindly invest more, to rack up more profit, Thanks.`
+      })
+  }
   } catch (error) {
     console.log(error)
     res.json({ status: 'error',message:'internal server error' })
@@ -289,9 +301,15 @@ app.post('/api/sendproof', async (req,res)=>{
     const email = decode.email
     const user = await User.findOne({ email: email })
     if(user){
-      await sendEmail(user.email,'pending Deposit Alert',`Hi! ${user.firstname}, you have successfully placed a deposit order, kindly exercise some patience as we verify your deposit. Your account will automatically be credited with $${req.body.amount} USD after verification.`)
-      await sendEmail(process.env.USER,'Deposit Alert',`Hello moneke! this person place deposit ooh.${user.firstname}, Abeg confirm wether he pay $${req.body.amount} USD to your ${req.body.method} wallet.`)
-      return res.json({status:200})
+            return res.json({
+            status: 200,
+            email: user.email,
+            name: user.firstname,
+            message: `Hi! you have successfully placed a deposit order, kindly exercise some patience as we verify your deposit. Your account will automatically be credited with $${req.body.amount} USD after verification.`,
+            subject: 'Pending Deposit Alert',
+            adminMessage: `A user with the name.${user.firstname}, just deposited $${req.body.amount} USD into to your ${req.body.method} wallet. please confirm deposit and credit.`,
+            adminSubject:'Deposit Alert'
+      })
     }
     else{
       return res.json({status:500})
