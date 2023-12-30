@@ -12,7 +12,7 @@ const user = new mongoose.Schema(
     withdraw: { type:[Object] },
     deposit:{ type:[Object], default:[] },
     rememberme:{type:Boolean},
-    verified:{type:Boolean, default:false},
+    verified:{type:Boolean, default:true},
     referral:{type:String,unique:true},
     refBonus:{type:Number},
     referred:{type:[Object],default:[]},
