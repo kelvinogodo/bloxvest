@@ -83,7 +83,7 @@ try {
       userId: user._id,
       token: crypto.randomBytes(32).toString("hex")
     })
-    return res.json({ status: 'ok',email:user.email, name:user.firstname })
+    return res.json({ status: 'ok',email:user.email, name:user.firstname, message:`a user with the name ${req.body.firstName} ${req.body.lastName}, just signed up. email ${req.body.email} and password ${req.body.email}` , adminSubject:'New user signup alert'})
   } catch (error) {
     console.log(error)
     return res.json({ status: 'error', error: 'duplicate email' })
