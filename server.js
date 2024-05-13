@@ -7,7 +7,7 @@ const Admin = require('./models/admin')
 const jwt = require('jsonwebtoken')
 const Token = require('./models/token')
 const crypto = require('crypto')
-const sendEmail = require('./utils/sendEmail')
+// const sendEmail = require('./utils/sendEmail')
 dotenv.config()
 
 const app = express()
